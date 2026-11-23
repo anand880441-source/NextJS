@@ -1,27 +1,43 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useRouter } from "next/navigation"; // Optional: for redirecting after login
 
 function Login() {
-  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
-  useEffect(() => {
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault(); // Prevents the page from refreshing
+    setError("");
+    setLoading(true);
+
     try {
-      const fetchApi = async() => {
-        const response = await fetch('/api/auth/login');
+      const response = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
 
-        if(response.ok){
-          
-        }
+      const data = await response.json();
+
+      if (response.ok) {
+        // Handle successful login (e.g., redirect to dashboard)
+        router.push("/dashboard");
+      } else {
+        setError(data.message || "Invalid email or password");
       }
-
-      fetchApi()
-
     } catch (err) {
-      console.log(err);
+      setError("Something went wrong. Please try again.");
+      console.error(err);
+    } finally {
+      setLoading(false);
     }
-  }, []);
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-neutral-950 px-4">
@@ -33,35 +49,37 @@ function Login() {
           Login to continue
         </p>
 
-        <div className="space-y-4">
-          <input
-            type="text"
-            placeholder="Enter your name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            className="w-full p-3.5 rounded-xl bg-neutral-950 border border-neutral-800 text-white placeholder-neutral-500 outline-none focus:border-blue-500"
-          />
+        {error && (
+          <p className="mb-4 text-sm text-red-400 text-center bg-red-950/50 border border-red-900 p-2.5 rounded-lg">
+            {error}
+          </p>
+        )}
 
+        <form onSubmit={handleLogin} className="space-y-4">
           <input
             type="email"
+            required
             placeholder="Enter your email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             className="w-full p-3.5 rounded-xl bg-neutral-950 border border-neutral-800 text-white placeholder-neutral-500 outline-none focus:border-blue-500"
           />
-
           <input
             type="password"
+            required
             placeholder="Enter your password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             className="w-full p-3.5 rounded-xl bg-neutral-950 border border-neutral-800 text-white placeholder-neutral-500 outline-none focus:border-blue-500"
           />
-
-          <button className="w-full p-3.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold transition-colors">
-            Login
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full p-3.5 rounded-xl bg-blue-600 hover:bg-blue-500 disabled:bg-blue-800 disabled:cursor-not-allowed text-white font-semibold transition-colors"
+          >
+            {loading ? "Logging in..." : "Login"}
           </button>
-        </div>
+        </form>
       </div>
     </div>
   );
