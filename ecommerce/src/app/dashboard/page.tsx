@@ -162,7 +162,7 @@ export default function DashboardPage() {
                 JD
               </div>
               <div className="hidden sm:block">
-                <p className="text-sm font-medium">John Doe</p>
+                <p className="text-sm font-medium"></p>
                 <p className="text-xs text-gray-500">Administrator</p>
               </div>
             </div>
