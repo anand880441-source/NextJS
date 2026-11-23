@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "dotenv": "^18.0.10",
+    "lucide-react": "^1.77.0",
     "mongoose": "^9.12.2",
     "next": "16.4.6",
     "react": "19.3.0",

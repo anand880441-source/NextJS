@@ -9,9 +9,9 @@ function Login() {
   useEffect(() => {
     try {
       const fetchApi = async() => {
-        const response = await fetch('/api/login');
+        const response = await fetch('/api/auth/login');
 
-        if(!response){
+        if(response.ok){
           
         }
       }
