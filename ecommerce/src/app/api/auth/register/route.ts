@@ -1,5 +1,6 @@
 import { connectDB } from "@/lib/mongodb";
 import User from "../../../../models/User";
+import bcrypt from "bcrypt"
 
 export async function POST(request: Request) {
   try {
@@ -23,7 +24,9 @@ export async function POST(request: Request) {
       );
     }
 
-    const newUser = new User({ name, email, password });
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const newUser = new User({ name, email, password:hashedPassword });
     await newUser.save();
 
     return Response.json(

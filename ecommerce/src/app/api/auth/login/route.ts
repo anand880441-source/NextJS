@@ -1,5 +1,6 @@
 import { connectDB } from "@/lib/mongodb";
 import User from "@/models/User";
+import {verifyPassword} from "@/lib/auth/password"
 
 export async function POST(request: Request) {
   await connectDB();
@@ -16,20 +17,22 @@ export async function POST(request: Request) {
       );
     }
 
-    const user = await User.findOne({email})
+    const user = await User.findOne({email}).select("+password")
 
     if(!user){
         return Response.json(
-            {error: "User not found!!"},
-            {status: 404}
+            {error: "Invalid credentials!!"},
+            {status: 401}
         )
     }
 
-    if(password != user.password){
-        return Response.json(
-            {error: "Incorrect Password or Email!!"},
-            {status: 400}
-        )
+    const valid = await verifyPassword(password, user.password);
+
+    if(!valid) {
+      return Response.json(
+        {error: "Invalid crediantials"},
+        {status: 401}
+      )
     }
 
     return Response.json(
