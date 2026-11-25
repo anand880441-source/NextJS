@@ -10,6 +10,10 @@ type Props = {
 export default async function ProductPage({ params }: Props) {
   const { id } = await params;
 
+  if (!mongoose.isObjectIdOrHexString(id)) {
+    notFound();
+  }
+
   await connectDB();
   const product = await Product.findById(id)
 
