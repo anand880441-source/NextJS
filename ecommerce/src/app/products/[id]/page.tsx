@@ -11,7 +11,7 @@ export default async function ProductPage({ params }: Props) {
   const { id } = await params;
 
   await connectDB();
-  const product = await Product.findById(id);
+  const product = await Product.findById(id)
 
   if (!product) {
     notFound();
