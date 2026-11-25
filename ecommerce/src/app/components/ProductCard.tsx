@@ -23,8 +23,8 @@ export default function ProductCard() {
           throw new Error(`Failed to load products (${response.status})`);
         }
 
-        const data: { product: Product[] } = await response.json();
-        setProducts(data.product || []);
+        const data: { products: Product[] } = await response.json();
+        setProducts(data.products);
       } catch (err) {
         setError(
           err instanceof Error ? err.message : "Failed to load products"
