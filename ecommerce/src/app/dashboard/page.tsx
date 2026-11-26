@@ -11,6 +11,8 @@ import {
   Settings,
   Bell,
   Search,
+  Link,
+  Package,
 } from "lucide-react";
 
 const stats = [
@@ -134,6 +136,20 @@ export default function DashboardPage() {
             <Settings size={20} />
             Settings
           </a>
+          <a
+            href="/products"
+            className="flex items-center gap-3 rounded-lg px-4 py-3 text-gray-500 hover:bg-gray-50"
+          >
+            <Settings size={20} />
+            Products
+          </a>
+          <Link
+					href='/dashboard'
+					className='flex items-center gap-3 rounded-lg bg-indigo-50 px-4 py-3 font-medium text-indigo-600'
+				>
+					<LayoutDashboard size={20} />
+					Dashboard
+				</Link>
         </nav>
       </aside>
 
